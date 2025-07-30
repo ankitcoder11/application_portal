@@ -47,21 +47,18 @@ const verifyOtp = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { fullName, email, mobileNumber, password } = req.body;
-    if ([fullName, email, mobileNumber, password].some(item => item?.trim() === "")) {
+    const { fullName, email, password } = req.body;
+    if ([fullName, email, password].some(item => item?.trim() === "")) {
         return ApiError(res, 400, "All fields are required")
     }
-    const existedUser = await User.findOne({
-        $or: [{ mobileNumber }, { email }]
-    })
+    const existedUser = await User.findOne({ email })
     if (existedUser) {
-        return ApiError(res, 409, "User with email or mobile number already exists")
+        return ApiError(res, 409, "User with email already exists")
     }
     const user = await User.create({
         fullName,
         email,
-        password,
-        mobileNumber
+        password
     })
 
     // Generate OTP
@@ -88,11 +85,11 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, mobileNumber, password } = req.body
-    if (!email && !mobileNumber) {
-        return ApiError(res, 400, "Mobile number or email is required")
+    const { email, password } = req.body
+    if (!email) {
+        return ApiError(res, 400, "email is required")
     }
-    const user = await User.findOne({ $or: [{ mobileNumber }, { email }] })
+    const user = await User.findOne({ email })
     if (!user) {
         return ApiError(res, 404, "User does not exist")
     }
@@ -102,10 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken  -otp  -otpExpiry")
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
+
     if (!loggedInUser.isOtpVerified) {
         // Generate OTP
         const otp = generateOtp();
@@ -120,19 +114,14 @@ const loginUser = asyncHandler(async (req, res) => {
         await sendOtpEmail(loggedInUser.email, otp);
 
         return res.status(201).json(
-            new ApiResponse(200, { user: loggedInUser }, "Verify your email address OTP sended")
+            new ApiResponse(200, { user: loggedInUser }, "Verify your email address, OTP sended")
         )
     }
     return res
         .status(200)
-        // .cookie("accessToken", accessToken, options)
-        // .cookie("refreshToken", refreshToken, options)
         .json(
             new ApiResponse(
-                200,
-                {
-                    user: loggedInUser, accessToken, refreshToken
-                },
+                200, { user: loggedInUser, accessToken, refreshToken },
                 "User logged in Successfully"
             )
         )
@@ -152,25 +141,8 @@ const logoutUser = asyncHandler(async (req, res) => {
         console.error("Error updating user:", error);
         return res.status(500).json(new ApiResponse(500, {}, "Internal server error"));
     }
-    // await User.findByIdAndUpdate(
-    //     req.user._id,
-    //     {
-    //         $set: {
-    //             refreshToken: undefined
-    //         }
-    //     },
-    //     {
-    //         new: true
-    //     }
-    // )
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
     return res
         .status(200)
-        // .clearCookie("refreshToken", options)
-        // .clearCookie("accessToken", options)
         .json(new ApiResponse(200, {}, "User logged out"))
 })
 
@@ -208,50 +180,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 })
 
-const changeCurrentPassword = asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword } = req.body;
-    const user = await User.findById(req.user?._id)
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
-    if (!isPasswordCorrect) {
-        throw new ApiError(400, "Invalid old Password")
-    }
-    user.password = newPassword;
-    await user.save({ validateBeforeSave: false })
-    return res
-        .status(200)
-        .json(new ApiResponse(200, {}, "Password Change Successfully"))
-
-})
-
-const getCurrentUser = asyncHandler(async (req, res) => {
-    return res
-        .status(200)
-        .json(new ApiResponse(200,
-            req.user,
-            "Current user Fetched successfully"
-        ))
-})
-
-const updateAccountDetails = asyncHandler(async (req, res) => {
-    const { fullName, email } = req.body
-    if (!fullName, !email) {
-        throw new ApiError(400, "All fields are required");
-    }
-    const user = await User.findByIdAndUpdate(
-        req.user?._id,
-        {
-            $set: {
-                fullName: fullName,
-                email: email
-            }
-        },
-        { new: true }
-    ).select("-password")
-    return res
-        .status(200)
-        .json(new ApiResponse(200, user, "Account details updated successfully"))
-})
-
 const forgotPassword = asyncHandler(async (req, res) => {
     const { email } = req.body;
     if (!email) {
@@ -270,7 +198,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     user.resetPasswordTokenExpiry = resetTokenExpiry;
     await user.save();
 
-    const resetPasswordLink = `${process.env.FRONTEND_URL}/login/reset-password/${resetToken}`;
+    const resetPasswordLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     await sendResetPasswordEmail(user.email, resetPasswordLink);
 
     return res.status(200).json(new ApiResponse(200, {}, "Password reset link has been sent to your email"));
@@ -302,6 +230,5 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 export {
     registerUser, loginUser, logoutUser, refreshAccessToken,
-    changeCurrentPassword, getCurrentUser, updateAccountDetails,
     verifyOtp, forgotPassword, resetPassword
 }

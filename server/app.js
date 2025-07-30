@@ -11,4 +11,6 @@ app.use(express.static("public"))
 import userRouter from './routes/user.routes.js'
 app.use("/api/v1/users", userRouter)
 
+import jobsRouter from './routes/jobs.routes.js';
+app.use("/api/v1/jobs", jobsRouter);
 export { app }

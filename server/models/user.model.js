@@ -10,13 +10,6 @@ const userSchema = new Schema(
             lowercase: true,
             trim: true,
         },
-        mobileNumber: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-        },
         fullName: {
             type: String,
             required: true,
