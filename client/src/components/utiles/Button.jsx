@@ -4,6 +4,7 @@ const Button = ({ text, onClick, bg, border, color, isLoading }) => {
         <button
             className=' text-center p-[10px] w-full font-bold rounded-md text-[#333333] cursor-pointer '
             onClick={(e) => { e.preventDefault(); onClick(); }}
+            type="submit"
             style={{ backgroundColor: bg, borderWidth: border, borderColor: 'black', color: color }}
         >
             {isLoading ? (
@@ -17,7 +18,7 @@ const Button = ({ text, onClick, bg, border, color, isLoading }) => {
 
 export default Button
 
-const ButtonLink = ({ text, bg, border, color, isLoading }) => {
+const ButtonLink = ({ text, bg, border, color }) => {
     return (
         <button
             className=' text-center p-[10px] w-full font-bold rounded-md text-[#333333] cursor-pointer '

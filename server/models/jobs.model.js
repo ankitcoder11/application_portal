@@ -6,10 +6,11 @@ const jobSchema = new Schema({
         required: true,
         trim: true
     },
-    company: {
+    skills: {
         type: String,
-        required: true,
-        trim: true
+    },
+    experience: {
+        type: String,
     },
     location: {
         type: String,

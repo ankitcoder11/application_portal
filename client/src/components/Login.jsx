@@ -3,7 +3,6 @@ import women from '/women.png'
 import InputComponent, { InputPasswordComponent } from './utiles/InputComponent';
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import Cookies from 'js-cookie';
 import * as Yup from 'yup';
 import { loginUsers } from '../api/users';
 import { Link, useNavigate } from 'react-router-dom';

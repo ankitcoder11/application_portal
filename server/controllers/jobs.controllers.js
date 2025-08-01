@@ -4,19 +4,53 @@ import { ApiResponse } from "../utiles/ApiResponse.js";
 import { asyncHandler } from "../utiles/asyncHandler.js";
 
 // Get all jobs
+// export const getJobs = asyncHandler(async (req, res) => {
+//     let { page = 1, limit = 10 } = req.query;
+//     page = parseInt(page);
+//     limit = parseInt(limit);
+
+//     if (page < 1 || limit < 1) {
+//         return ApiError(res, 400, "Page and limit must be positive integers");
+//     }
+
+//     const skip = (page - 1) * limit;
+//     const [jobs, total] = await Promise.all([
+//         Job.find().skip(skip).limit(limit),
+//         Job.countDocuments()
+//     ]);
+
+//     return res.status(200).json(
+//         new ApiResponse(200, {
+//             page,
+//             limit,
+//             total,
+//             jobs
+//         }, "Jobs fetched successfully")
+//     );
+// });
+// Get all jobs with search
 export const getJobs = asyncHandler(async (req, res) => {
-    let { page = 1, limit = 10 } = req.query;
+    let { page = 1, limit = 10, search = '' } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
-
+    search = search.trim();
     if (page < 1 || limit < 1) {
         return ApiError(res, 400, "Page and limit must be positive integers");
     }
-
     const skip = (page - 1) * limit;
+    // Create a dynamic filter for search
+    const searchFilter = search
+        ? {
+            $or: [
+                { title: { $regex: search, $options: 'i' } },
+                { location: { $regex: search, $options: 'i' } }
+            ]
+        }
+        : {};
+
     const [jobs, total] = await Promise.all([
-        Job.find().skip(skip).limit(limit),
-        Job.countDocuments()
+        Job.find(searchFilter).skip(skip).limit(limit),
+        Job.countDocuments(searchFilter)
     ]);
 
     return res.status(200).json(
@@ -28,6 +62,7 @@ export const getJobs = asyncHandler(async (req, res) => {
         }, "Jobs fetched successfully")
     );
 });
+
 
 // Get a single job
 export const getJobById = asyncHandler(async (req, res) => {
@@ -44,18 +79,19 @@ export const getJobById = asyncHandler(async (req, res) => {
 
 // Create a new job
 export const createJob = asyncHandler(async (req, res) => {
-    const { title, company, location, type, description } = req.body;
+    const { title, skills, location, type, description, experience } = req.body;
 
-    if ([title, company, location, type, description].some(field => field?.trim() === "")) {
+    if ([title, location, type, description].some(field => field?.trim() === "")) {
         return ApiError(res, 400, "All job fields are required");
     }
 
     const job = new Job({
         title,
-        company,
+        skills,
         location,
         type,
         description,
+        experience,
         image: req.file?.path || ""
     });
 

@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         if (isAuthenticated) {
             const userDetails = JSON.parse(localStorage.getItem('user'));
             setUser(userDetails);
-            setIsAdmin(userDetails?.email === 'ankit@gmail.com');
+            setIsAdmin(userDetails?.email === import.meta.env.VITE_ADMIN);
         } else {
             localStorage.removeItem('user')
         }

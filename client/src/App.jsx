@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Header from "./components/Header"
 import Login from "./components/Login"
 import Home from "./components/Home";
@@ -10,9 +10,13 @@ import OTPVerify from "./components/login/OTPVerify";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 import AuthLayout from "./components/login/AuthLayout";
+import AllJobList from "./components/jobs/AllJobList";
+import JobDetail from "./components/jobs/JobDetail";
+import JobPost from "./components/jobs/JobPost";
+import RoleBasedRoute from "./components/RoleBasedRoute";
 
 const App = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const { pathname } = useLocation();
   const isAuthPage = [
     "/login",
@@ -29,14 +33,27 @@ const App = () => {
         {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-140px)] gap-[10px] flex flex-col ">
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col ">
             <div className="text-xl font-semibold">{user?.fullName}</div>
+            {/* 👋 Welcome back, Ankit! */}
             <div className="text-[#333333] ">{user?.email}</div>
           </div>
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col">
+            {isAdmin ?
+              <div className="flex flex-col gap-[10px] font-medium ">
+                <Link to={'/admin/post-job'} className={`${pathname === '/admin/post-job' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >Post Jobs</Link>
+                <Link to={'/admin/manage-job'} className={`${pathname === '/admin/manage-job' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >Manage Jobs</Link>
+              </div>
+              : <div>
+                <div>Total Applications : 12</div>
+                <div>Jobs Saved : 4</div>
+              </div>
+            }
           </div>
         </div>)}
-        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] h-[calc(100vh-140px)]" : "w-full h-[calc(100vh-140px)]"} bg-[#00F295] rounded-md`}>
+        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] h-[calc(100vh-140px)] p-[20px] " : "w-full"} bg-[#00F295] rounded-md overflow-auto`}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/jobs" element={<AllJobList />} />
+            <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/login" element={
               <RedirectIfLoggedIn>
                 <AuthLayout><Login /></AuthLayout>
@@ -62,6 +79,15 @@ const App = () => {
                 <AuthLayout><ResetPassword /></AuthLayout>
               </RedirectIfLoggedIn>
             } />
+            <Route path="/admin/*"
+              element={
+                <RoleBasedRoute>
+                  <Routes>
+                    <Route path="post-job" element={<JobPost />} />
+                    <Route path="manage-job" element={<AllJobList />} />
+                  </Routes>
+                </RoleBasedRoute>
+              } />
           </Routes>
         </div>
       </div>

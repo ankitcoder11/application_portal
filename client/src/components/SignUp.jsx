@@ -44,7 +44,7 @@ const SignUp = () => {
             });
             toast.success(response?.message);
             formikSignup.resetForm();
-            navigate(`/login/verify-otp/${response?.data._id}`)
+            navigate(`/verify-otp/${response?.data._id}`)
         } catch (error) {
             toast.error(error.message || 'An unexpected error occurred. Please try again.');
             console.error('Error:', error.message);

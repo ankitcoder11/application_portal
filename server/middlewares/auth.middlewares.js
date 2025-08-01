@@ -22,7 +22,7 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
 })
 
 export const verifyAdmin = (req, res, next) => {
-    if (req.user?.email !== "ankit@gmail.com") {
+    if (req.user?.email !== process.env.ADMIN_EMAIL) {
         return ApiError(res, 403, "Forbidden: Admin access required");
     }
     next();
