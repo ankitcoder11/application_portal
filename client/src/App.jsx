@@ -14,6 +14,8 @@ import AllJobList from "./components/jobs/AllJobList";
 import JobDetail from "./components/jobs/JobDetail";
 import JobPost from "./components/jobs/JobPost";
 import RoleBasedRoute from "./components/RoleBasedRoute";
+import MyJobs from "./components/jobs/MyJobs";
+import MyJobsDetail from "./components/jobs/MyJobsDetail";
 
 const App = () => {
   const { user, isAuthenticated, isAdmin } = useAuth();
@@ -33,7 +35,6 @@ const App = () => {
         {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-140px)] gap-[10px] flex flex-col ">
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col ">
             <div className="text-xl font-semibold">{user?.fullName}</div>
-            {/* 👋 Welcome back, Ankit! */}
             <div className="text-[#333333] ">{user?.email}</div>
           </div>
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col">
@@ -43,8 +44,10 @@ const App = () => {
                 <Link to={'/admin/manage-job'} className={`${pathname === '/admin/manage-job' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >Manage Jobs</Link>
               </div>
               : <div>
-                <div>Total Applications : 12</div>
-                <div>Jobs Saved : 4</div>
+                <div className="flex flex-col gap-[10px] font-medium ">
+                  <Link to={'/jobs/my-jobs'} className={`${pathname === '/jobs/my-jobs' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >My jobs</Link>
+                  <Link to={'/jobs/saved-jobs'} className={`${pathname === '/jobs/saved-jobs' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >Saved jobs</Link>
+                </div>
               </div>
             }
           </div>
@@ -54,6 +57,9 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/jobs" element={<AllJobList />} />
             <Route path="/jobs/:id" element={<JobDetail />} />
+            <Route path="/jobs/my-jobs" element={<MyJobs />} />
+            <Route path="/jobs/my-jobs/:id" element={<MyJobsDetail />} />
+            <Route path="/jobs/saved-jobs" element={<MyJobs />} />
             <Route path="/login" element={
               <RedirectIfLoggedIn>
                 <AuthLayout><Login /></AuthLayout>

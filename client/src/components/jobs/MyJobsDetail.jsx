@@ -4,14 +4,11 @@ import { getJob } from '../../api/jobs';
 import { BsFillBuildingsFill } from 'react-icons/bs';
 import Loader from '../utiles/Loader';
 import Button from '../utiles/Button';
-import { applyJob } from '../../api/application';
-import toast from 'react-hot-toast';
 
-const JobDetail = () => {
+const MyJobsDetail = () => {
     const { id } = useParams();
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [applyLoading, setApplyLoading] = useState(false);
 
     useEffect(() => {
         const fetchJob = async () => {
@@ -27,19 +24,6 @@ const JobDetail = () => {
 
         fetchJob();
     }, [id]);
-
-    const applyNow = async () => {
-        setApplyLoading(true)
-        try {
-            const response = await applyJob({ jobId: id });
-            toast.success(response?.message);
-        } catch (error) {
-            toast.error(error.message || 'An unexpected error occurred. Please try again.');
-            console.error('Error:', error.message);
-        } finally {
-            setApplyLoading(false);
-        }
-    }
 
     return (
         <div className='w-full h-full '>
@@ -59,8 +43,7 @@ const JobDetail = () => {
                     <p><span className='text-lg font-medium'>Job Type:</span> {job?.type}</p>
                     <p>{job?.description}</p>
                     <div className='flex gap-[10px] '>
-                        <div className='w-[20%]'><Button isLoading={applyLoading} onClick={applyNow} color={'white'} bg={'black'} text={'Apply'} /></div>
-                        <div className='w-[20%]'><Button isLoading={loading} color={'white'} bg={'black'} text={'Save'} /></div>
+                        <div className='w-[20%]'><Button color={'#d0d0d0'} bg={'black'} text={'Applied'} /></div>
                     </div>
                 </>
             }
@@ -68,4 +51,4 @@ const JobDetail = () => {
     );
 };
 
-export default JobDetail;
+export default MyJobsDetail;

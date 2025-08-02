@@ -63,7 +63,6 @@ export const getJobs = asyncHandler(async (req, res) => {
     );
 });
 
-
 // Get a single job
 export const getJobById = asyncHandler(async (req, res) => {
     const job = await Job.findById(req.params.id);
