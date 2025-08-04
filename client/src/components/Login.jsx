@@ -21,7 +21,7 @@ const Login = () => {
             .required('Email is required.')
             .email('Invalid email address.'),
         password: Yup.string()
-            .required('New password is required.')
+            .required('Password is required.')
     });
 
     const loginUser = async (values) => {

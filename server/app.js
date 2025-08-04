@@ -17,4 +17,7 @@ app.use("/api/v1/jobs", jobsRouter);
 import applicationRouter from './routes/application.routes.js';
 app.use("/api/v1/application", applicationRouter);
 
+import savedJobRouter from './routes/savedJobs.routes.js';
+app.use("/api/v1/savejob", savedJobRouter);
+
 export { app }

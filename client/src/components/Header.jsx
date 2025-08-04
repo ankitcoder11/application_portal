@@ -6,26 +6,44 @@ import { useAuth } from '../context/AuthContext';
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const { pathname } = useLocation();
+
+  const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'Jobs', href: '/jobs' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' }
+  ];
   return (
-    <div className='bg-[#00F295] p-[15px] rounded-md'>
+    <div className='bg-[#00F295] p-[10px] rounded-md'>
       <div className='flex justify-between w-[95%] mx-auto items-center'>
-        <div className='w-[20%]'>
-          <p className='text-4xl font-semibold'>Nottingham</p>
-          <p className='text-xl text-right font-semibold'>Building Society</p>
-          {/* <img src={logo} /> */}
+        <div className='w-[15%]'>
+          <p className='text-xl font-semibold'>Nottingham</p>
+          <p className='text-sm text-right font-semibold'>Building Society</p>
         </div>
-        <div className='flex w-[35%] justify-between font-medium '>
-          <Link to={'/'} className={`${pathname === '/' && 'text-blue-600 border-b-[1.5px] pb-[5px] border-blue-600 '}`} >Home</Link>
-          <Link to={'/jobs'} className={`${pathname.includes('/jobs') && 'text-blue-600 border-b-[1.5px] pb-[5px] border-blue-600 '}`}>Jobs</Link>
-          <Link to={'/aboutus'} className={`${pathname === '/aboutus' && 'text-blue-600 border-b-[1.5px] pb-[5px] border-blue-600 '}`}>About Us</Link>
-          <Link to={'/contactus'} className={`${pathname === '/contactus' && 'text-blue-600 border-b-[1.5px] pb-[5px] border-blue-600 '}`}>Contact Us</Link>
+        <div className="flex items-center justify-between w-[30%] ">
+          {navigation.map((item) => (
+            <Link key={item.name} to={item.href}
+              className={`text-sm font-medium transition-colors hover:text-blue-600 
+              ${pathname === item.href ? 'text-blue-600' : 'text-gray-700'}`}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
-        {
-          isAuthenticated ?
-            <div className='w-[15%]'><Button onClick={logout} color={'white'} bg={'black'} text={'Logout'} /></div>
+        <div className='flex items-center justify-between w-[10%] '>
+          {isAuthenticated ?
+            <Button onClick={logout} color={'white'} bg={'black'} text={'Logout'} />
             :
-            <Link to={'/login'} className='w-[15%]'><ButtonLink color={'white'} bg={'black'} text={'Login'} /></Link>
-        }
+            <>
+              <Link to="/login"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Log in
+              </Link>
+              <Link to={'/signup'}><ButtonLink color={'white'} bg={'black'} text={'Sign up'} /></Link>
+            </>
+          }
+        </div>
       </div>
     </div>
   )

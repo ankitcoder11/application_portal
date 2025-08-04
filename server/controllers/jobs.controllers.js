@@ -78,7 +78,18 @@ export const getJobById = asyncHandler(async (req, res) => {
 
 // Create a new job
 export const createJob = asyncHandler(async (req, res) => {
-    const { title, skills, location, type, description, experience } = req.body;
+    const {
+        title,
+        department,
+        location,
+        type,
+        experience,
+        description,
+        salary,
+        requirements,
+        responsibilities,
+        skills,
+    } = req.body;
 
     if ([title, location, type, description].some(field => field?.trim() === "")) {
         return ApiError(res, 400, "All job fields are required");
@@ -86,12 +97,15 @@ export const createJob = asyncHandler(async (req, res) => {
 
     const job = new Job({
         title,
-        skills,
+        department,
         location,
         type,
-        description,
         experience,
-        image: req.file?.path || ""
+        description,
+        salary,
+        requirements,
+        responsibilities,
+        skills,
     });
 
     await job.save();

@@ -11,11 +11,11 @@ import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 import AuthLayout from "./components/login/AuthLayout";
 import AllJobList from "./components/jobs/AllJobList";
-import JobDetail from "./components/jobs/JobDetail";
 import JobPost from "./components/jobs/JobPost";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import MyJobs from "./components/jobs/MyJobs";
-import MyJobsDetail from "./components/jobs/MyJobsDetail";
+import SavedJobs from "./components/jobs/SavedJobs";
+
 
 const App = () => {
   const { user, isAuthenticated, isAdmin } = useAuth();
@@ -29,10 +29,11 @@ const App = () => {
     pathname.startsWith("/reset-password");
   return (
     <div className={`${!isAuthPage ? "p-[10px]" : ""} flex flex-col gap-[10px] `}>
+    {/* <div className='flex flex-col gap-[10px] p-[10px] '> */}
       <Toaster />
       {!isAuthPage && <Header />}
       <div className="flex w-full gap-[10px] ">
-        {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-140px)] gap-[10px] flex flex-col ">
+        {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-100px)] gap-[10px] flex flex-col ">
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col ">
             <div className="text-xl font-semibold">{user?.fullName}</div>
             <div className="text-[#333333] ">{user?.email}</div>
@@ -52,14 +53,12 @@ const App = () => {
             }
           </div>
         </div>)}
-        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] h-[calc(100vh-140px)] p-[20px] " : "w-full"} bg-[#00F295] rounded-md overflow-auto`}>
+        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] " : "w-full"} bg-[#00F295] rounded-md overflow-auto`}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/jobs" element={<AllJobList />} />
-            <Route path="/jobs/:id" element={<JobDetail />} />
             <Route path="/jobs/my-jobs" element={<MyJobs />} />
-            <Route path="/jobs/my-jobs/:id" element={<MyJobsDetail />} />
-            <Route path="/jobs/saved-jobs" element={<MyJobs />} />
+            <Route path="/jobs/saved-jobs" element={<SavedJobs />} />
             <Route path="/login" element={
               <RedirectIfLoggedIn>
                 <AuthLayout><Login /></AuthLayout>
