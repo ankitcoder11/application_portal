@@ -131,7 +131,7 @@ const AllJobList = () => {
 
                                 <div className="flex flex-wrap gap-2 mb-6">
                                     {job.skills.map((skill, skillIndex) => (
-                                        <span key={skillIndex} className="px-3 py-1 bg-blue-50 text-green-600 text-xs font-medium rounded-full">
+                                        <span key={skillIndex} className="px-3 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
                                             {skill}
                                         </span>
                                     ))}

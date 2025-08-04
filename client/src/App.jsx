@@ -15,6 +15,7 @@ import JobPost from "./components/jobs/JobPost";
 import RoleBasedRoute from "./components/RoleBasedRoute";
 import MyJobs from "./components/jobs/MyJobs";
 import SavedJobs from "./components/jobs/SavedJobs";
+import About from "./components/About";
 
 
 const App = () => {
@@ -29,7 +30,7 @@ const App = () => {
     pathname.startsWith("/reset-password");
   return (
     <div className={`${!isAuthPage ? "p-[10px]" : ""} flex flex-col gap-[10px] `}>
-    {/* <div className='flex flex-col gap-[10px] p-[10px] '> */}
+      {/* <div className='flex flex-col gap-[10px] p-[10px] '> */}
       <Toaster />
       {!isAuthPage && <Header />}
       <div className="flex w-full gap-[10px] ">
@@ -59,6 +60,7 @@ const App = () => {
             <Route path="/jobs" element={<AllJobList />} />
             <Route path="/jobs/my-jobs" element={<MyJobs />} />
             <Route path="/jobs/saved-jobs" element={<SavedJobs />} />
+            <Route path="/about" element={<About />} />
             <Route path="/login" element={
               <RedirectIfLoggedIn>
                 <AuthLayout><Login /></AuthLayout>
