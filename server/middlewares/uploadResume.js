@@ -1,7 +1,6 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { cloudinary } from "../utiles/cloudinary.js";
-
+import { cloudinary } from "../utiles/Cloudinary.js";
 const resumeStorage = new CloudinaryStorage({
   cloudinary,
   params: (req, file) => {
