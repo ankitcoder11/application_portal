@@ -65,11 +65,11 @@ const SignUp = () => {
 
     return (
         <>
-            <div className='w-[45%] h-full relative '>
+            <div className='w-[45%] h-full relative max-[800px]:hidden '>
                 <img className='w-[450px] h-[400px] z-[2] relative ' src={women} />
                 <div className='absolute w-[300px] h-[280px] bottom-[5px] left-[5px] bg-gradient-to-b from-[#00E3A5] to-[#005941] shadow-2xl rounded-full shadow-black '></div>
             </div>
-            <form onSubmit={formikSignup.handleSubmit} className='w-[50%] flex flex-col gap-[15px] '>
+            <form onSubmit={formikSignup.handleSubmit} className='w-[50%] max-[800px]:w-[100%] flex flex-col gap-[15px] '>
                 <div className='text-4xl font-semibold text-[#333333]'>Sign Up</div>
                 <InputComponent icon={<CiUser />} placeholder={'Full Name'} name={'fullName'} value={formikSignup?.values?.fullName} changeHandler={formikSignup.handleChange} errors={formikSignup?.errors?.fullName} touched={formikSignup?.touched?.fullName} />
                 <InputComponent icon={<CiMail />} placeholder={'Email'} name={'email'} value={formikSignup?.values?.email} changeHandler={formikSignup.handleChange} errors={formikSignup?.errors?.email} touched={formikSignup?.touched?.email} />

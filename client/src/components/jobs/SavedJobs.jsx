@@ -68,7 +68,7 @@ const SavedJobs = () => {
                     {jobs.length === 0 ?
                         <div className='text-2xl w-full font-semibold flex flex-col items-center justify-center gap-[20px] h-full'>
                             <div>No jobs Found</div>
-                            <Link to={"/jobs"} className="w-[20%] block "><ButtonLink text='View Open Positions' color='white' bg='#222222' /></Link>
+                            <Link to={"/jobs"} className="w-[20%] block max-[800px]:w-[70%]"><ButtonLink text='View Open Positions' color='white' bg='#222222' /></Link>
                         </div>
                         : jobs?.map((job) => (
                             <div
@@ -125,11 +125,11 @@ const SavedJobs = () => {
             {selectedJob && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
+                        <div className="p-8 max-[800px]:p-4">
+                            <div className="flex justify-between items-start mb-6 max-[800px]:mb-4">
                                 <div>
-                                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{selectedJob.title}</h3>
-                                    <div className="flex items-center gap-6 text-gray-600">
+                                    <h3 className="text-3xl max-[800px]:text-2xl font-bold text-gray-900 mb-4 ">{selectedJob.title}</h3>
+                                    <div className="flex items-center max-[800px]:items-start gap-6 max-[800px]:gap-2 text-gray-600 max-[800px]:flex-col">
                                         <span className="flex items-center gap-2">
                                             <div className='text-lg'><PiBuildingsLight /></div>
                                             {selectedJob.department}
@@ -152,29 +152,34 @@ const SavedJobs = () => {
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-8 mb-8">
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Requirements</h4>
-                                    <ul className="space-y-3">
-                                        {selectedJob.requirements.map((req, index) => (
-                                            <li key={index} className="flex items-center gap-3">
-                                                <div className=" text-green-600"><FaCheck /> </div>
-                                                <span className="text-gray-600">{req}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                {selectedJob.requirements.length > 0 &&
 
-                                <div>
-                                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Responsibilities</h4>
-                                    <ul className="space-y-3">
-                                        {selectedJob.responsibilities.map((resp, index) => (
-                                            <li key={index} className="flex items-center gap-3">
-                                                <span className='text-green-600'><FaArrowRightLong /></span>
-                                                <span className="text-gray-600">{resp}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Requirements</h4>
+                                        <ul className="space-y-3">
+                                            {selectedJob.requirements.map((req, index) => (
+                                                <li key={index} className="flex items-center gap-3">
+                                                    <div className=" text-green-600"><FaCheck /> </div>
+                                                    <span className="text-gray-600">{req}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                }
+                                {selectedJob.responsibilities.length > 0 &&
+
+                                    <div>
+                                        <h4 className="text-xl font-semibold text-gray-900 mb-4">Responsibilities</h4>
+                                        <ul className="space-y-3">
+                                            {selectedJob.responsibilities.map((resp, index) => (
+                                                <li key={index} className="flex items-center gap-3">
+                                                    <span className='text-green-600'><FaArrowRightLong /></span>
+                                                    <span className="text-gray-600">{resp}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                }
                             </div>
 
                             <div className="flex gap-4 justify-center">

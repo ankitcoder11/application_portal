@@ -113,7 +113,8 @@ const UpdateJobComponent = ({ job, setJob, fetchJobs }) => {
 
                 await updateJobs(formData);
                 fetchJobs();
-                toast.success('Job posted successfully!');
+                setJob(null);
+                toast.success('Job updated successfully!');
             } catch (err) {
                 toast.error(err.message || 'Something went wrong');
             } finally {

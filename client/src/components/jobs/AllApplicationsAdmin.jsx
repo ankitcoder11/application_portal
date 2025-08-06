@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 const AllApplicationsAdmin = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [stausLoading, setStatusLoading] = useState(false);
+  const [stausLoading, setStatusLoading] = useState(null);
 
   const fetchAppllications = async () => {
     setLoading(true);
@@ -32,7 +32,7 @@ const AllApplicationsAdmin = () => {
   };
 
   const handleChange = async (event, job) => {
-    setStatusLoading(true);
+    setStatusLoading(job._id);
     const selectedStatus = event.target.value;
 
     try {
@@ -43,7 +43,7 @@ const AllApplicationsAdmin = () => {
       toast.error(error.message || 'An unexpected error occurred. Please try again.');
       console.error('Error:', error.message);
     } finally {
-      setStatusLoading(false);
+      setStatusLoading(null);
     }
   };
 
@@ -52,19 +52,19 @@ const AllApplicationsAdmin = () => {
       {loading ? <Loader /> :
         jobs?.map((job, index) => (
           <div key={index}
-            className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
+            className="bg-white rounded-2xl p-8 max-[700px]:p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
           >
-            <div className="flex justify-between mb-6">
+            <div className="flex justify-between mb-6 max-[700px]:mb-3 max-[700px]:flex-col max-[700px]:gap-2">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{job.userId.fullName}</h3>
               <div><Button bg={'#00F295'} onClick={() => handlePreviewResume(job.userId.resume)} text={'Resume'} /></div>
-              <div className="text-right">
+              <div className="text-right max-[700px]:text-left">
                 <div className="text-lg font-semibold text-green-600 mb-2">{job.userId.email}</div>
                 <div className="text-xs text-gray-500">{new Date(job.appliedAt).toLocaleString()}</div>
               </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between max-[700px]:gap-2 max-[700px]:flex-col">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{job.jobId.title}</h3>
-              <div className="p-2 border rounded w-[125px] ">{stausLoading ? <div className="mx-auto p-2 border-white text-sm h-[20px] w-[20px] animate-spin rounded-full border-[3px] border-t-black" />
+              <div className="p-2 border rounded w-[125px] ">{stausLoading === job._id ? <div className="mx-auto p-2 border-white text-sm h-[20px] w-[20px] animate-spin rounded-full border-[3px] border-t-black" />
                 : <select className="pr-2 w-full outline-none"
                   name="status" value={job.status} onChange={(e) => handleChange(e, job)}
                 >

@@ -58,9 +58,9 @@ const Login = () => {
 
     return (
         <>
-            <form onSubmit={formikLogin.handleSubmit} className='w-[50%] flex flex-col gap-[15px] '>
-                <div className='text-4xl font-semibold text-[#333333]'>Welcome to the Nottingham Building Society</div>
-                <div className='text-xl'>If you already have an accout, please sign in below.</div>
+            <form onSubmit={formikLogin.handleSubmit} className='w-[50%] max-[800px]:w-[100%] flex flex-col gap-[15px] max-[800px]:gap-[10px] '>
+                <div className='text-4xl max-[800px]:text-2xl font-semibold text-[#333333]'>Welcome to the Nottingham Building Society</div>
+                <div className='text-xl max-[800px]:text-base'>If you already have an accout, please sign in below.</div>
                 <InputComponent icon={<CiMail />} placeholder={'Email'} name={'email'} value={formikLogin?.values?.email} changeHandler={formikLogin.handleChange} errors={formikLogin?.errors?.email} touched={formikLogin?.touched?.email} />
                 <InputPasswordComponent icon={<CiLock />} showPassword={showPassword} setShowPassword={() => setShowPassword(prev => !prev)} placeholder={'Password'} name={'password'} value={formikLogin?.values?.password} changeHandler={formikLogin.handleChange} errors={formikLogin?.errors?.password} touched={formikLogin?.touched?.password} />
                 <Link to={'/forgot-password'} className='font-bodyFont text-[12px] text-right underline'>Forgot your Password?</Link>
@@ -69,7 +69,7 @@ const Login = () => {
                     <Link to={'/signup'} className='w-[40%]'><ButtonLink text={'Sign Up'} border={'1.5px'} /></Link>
                 </div>
             </form>
-            <div className='w-[45%] h-full relative '>
+            <div className='w-[45%] h-full relative max-[800px]:hidden '>
                 <img className='w-[450px] h-[400px] z-[2] relative ' src={women} />
                 <div className='absolute w-[300px] h-[300px] bottom-[22px] bg-gradient-to-b from-[#00E3A5] to-[#005941] right-3 shadow-2xl rounded-full shadow-black '></div>
             </div>

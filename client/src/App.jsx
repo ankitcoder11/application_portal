@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import Header from "./components/Header"
+import Header from "./components/Header/Header"
 import Login from "./components/Login"
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
@@ -95,7 +95,7 @@ const App = () => {
       <Toaster />
       {!isAuthPage && <Header />}
       <div className="flex w-full gap-[10px] ">
-        {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-100px)] gap-[10px] flex flex-col ">
+        {!isAuthPage && (isAuthenticated && <div className=" w-[25%] h-[calc(100vh-100px)] gap-[10px] flex flex-col max-[800px]:hidden">
           <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col gap-2 ">
             <div className="text-xl font-semibold">{user?.fullName}</div>
             <div className="text-[#333333] ">{user?.email}</div>
@@ -104,7 +104,7 @@ const App = () => {
             {/* <div><Button bg={'black'} color={'white'} onClick={() => handleResumeDownload(user?.resume)} text={'Download Resume'} /></div> */}
             {resumePopUp && <PopUp close={() => setResumePopUp(false)}><ResumeUploader setResumePopUp={() => setResumePopUp(false)} /></PopUp>}
           </div>
-          <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col">
+          <div className="bg-[#00F295] w-full rounded-md h-1/2 justify-center items-center flex flex-col max-[800px]:hidden ">
             {isAdmin ?
               <div className="flex flex-col gap-[10px] font-medium ">
                 <Link to={'/admin/post-job'} className={`${pathname === '/admin/post-job' ? 'text-blue-600 border-b-[1.5px] border-blue-600 ' : 'border-b-[1.5px] border-[#00F295]'} p-[5px]`} >Post Jobs</Link>
@@ -120,7 +120,7 @@ const App = () => {
             }
           </div>
         </div>)}
-        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] " : "w-full"} bg-[#00F295] rounded-md overflow-auto`}>
+        <div className={`${!isAuthPage && isAuthenticated ? "w-[75%] max-[800px]:w-full " : "w-full"} bg-[#00F295] rounded-md overflow-auto`}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/jobs" element={<AllJobList />} />

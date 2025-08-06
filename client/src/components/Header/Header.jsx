@@ -1,24 +1,32 @@
-import Button, { ButtonLink } from './utiles/Button'
+import Button, { ButtonLink } from '../utiles/Button'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import { IoMenu } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
+import MobileHeader from './MobileHeader';
 
 const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const { pathname } = useLocation();
+  const [mobile, setMobile] = useState(false);
 
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Jobs', href: '/jobs' },
     { name: 'About', href: '/about' },
   ];
+
+  useEffect(() => {
+    setMobile(false);
+  }, [pathname])
   return (
     <div className='bg-[#00F295] p-[10px] rounded-md'>
       <div className='flex justify-between w-[95%] mx-auto items-center'>
-        <Link to={'/'} className='w-[15%]'>
+        <Link to={'/'} className='w-[15%] max-[700px]:w-[50%] '>
           <p className='text-xl font-semibold'>Nottingham</p>
           <p className='text-sm text-right font-semibold'>Building Society</p>
         </Link>
-        <div className="flex items-center justify-between w-[20%] ">
+        <div className="flex items-center justify-between w-[20%] max-[700px]:hidden ">
           {navigation.map((item) => (
             <Link key={item.name} to={item.href}
               className={`text-sm font-medium transition-colors hover:text-blue-600 
@@ -28,7 +36,7 @@ const Header = () => {
             </Link>
           ))}
         </div>
-        <div className='flex items-center justify-between w-[10%] '>
+        <div className='flex items-center justify-between w-[10%] max-[700px]:hidden '>
           {isAuthenticated
             ? <Button onClick={logout} color={'white'} bg={'black'} text={'Logout'} />
             : <>
@@ -39,6 +47,10 @@ const Header = () => {
             </>
           }
         </div>
+        <div className='min-[700px]:hidden text-2xl' onClick={() => setMobile(true)}>
+          <IoMenu />
+        </div>
+        {mobile && <MobileHeader setMobile={setMobile} />}
       </div>
     </div>
   )

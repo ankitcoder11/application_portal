@@ -37,9 +37,9 @@ const About = () => {
                     </p>
                 </div>
 
-                <div className="flex gap-4 flex-wrap">
+                <div className="flex gap-4 flex-wrap  max-[800px]:flex-col">
                     {culturePoints.map((point, index) => (
-                        <div key={index} className="bg-white rounded-md p-6 shadow-lg hover:shadow-xl transition-shadow w-[32%] max-w-xs flex flex-col gap-3 ">
+                        <div key={index} className="bg-white rounded-md p-6 shadow-lg hover:shadow-xl transition-shadow w-[32%]  max-[800px]:w-full max-w-xs flex flex-col gap-3 ">
                             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
                                 <div className='text-2xl text-green-600'>{point.icon}</div>
                             </div>

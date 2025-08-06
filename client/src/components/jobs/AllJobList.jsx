@@ -85,7 +85,7 @@ const AllJobList = () => {
                 <div className='text-gray-700 text-2xl '><CiSearch /> </div>
                 <input type='text' placeholder='Job title or location' name={'search'} value={toSearch} onChange={(e) => setToSearch(e.target.value)}
                     className='py-[15px] outline-none w-full text-black placeholder-gray-700 ' />
-                <div className='w-[20%] '>
+                <div className='w-[20%] max-[800px]:w-[25%] '>
                     <Button isLoading={loading} bg={'black'} color={'white'}
                         onClick={() => {
                             if (toSearch.trim() || jobs.length === 0) {
@@ -189,11 +189,11 @@ const AllJobList = () => {
             {selectedJob && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-8">
-                            <div className="flex justify-between items-start mb-6">
+                        <div className="p-8 max-[800px]:p-4">
+                            <div className="flex justify-between items-start mb-6 max-[800px]:mb-4">
                                 <div>
-                                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{selectedJob.title}</h3>
-                                    <div className="flex items-center gap-6 text-gray-600">
+                                    <h3 className="text-3xl max-[800px]:text-2xl font-bold text-gray-900 mb-4">{selectedJob.title}</h3>
+                                    <div className="flex items-center max-[800px]:items-start gap-6 max-[800px]:gap-2 text-gray-600 max-[800px]:flex-col">
                                         <span className="flex items-center gap-2">
                                             <div className='text-lg'><PiBuildingsLight /></div>
                                             {selectedJob.department}
