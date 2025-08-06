@@ -3,37 +3,14 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 const userSchema = new Schema(
     {
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-        },
-        fullName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: [true, 'Passsword is required']
-        },
-        refreshToken: {
-            type: String,
-        },
-        otp: {
-            type: String,
-            required: false
-        },
-        otpExpiry: {
-            type: Date,
-            required: false
-        },
-        isOtpVerified: {
-            type: Boolean,
-            default: false
-        },
+        email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+        fullName: { type: String, required: true, trim: true },
+        resume: { type: String },
+        password: { type: String, required: [true, 'Passsword is required'] },
+        refreshToken: { type: String },
+        otp: { type: String, required: false },
+        otpExpiry: { type: Date, required: false },
+        isOtpVerified: { type: Boolean, default: false },
         resetPasswordToken: {
             type: String,
             required: false

@@ -12,6 +12,7 @@ const jobSchema = new mongoose.Schema({
     salary: String,
     posted: { type: Date, default: Date.now },
     skills: [String],
+    status: { type: String, enum: ['open', 'closed'], default: 'open' },
 }, { timestamps: true });
 
 export const Job = mongoose.model("Job", jobSchema)

@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utiles/ApiResponse.js";
 import jwt from "jsonwebtoken"
 import { generateOtp, generateResetToken, sendOtpEmail, sendResetPasswordEmail } from "../utiles/otpService.js";
+import https from 'https';
 
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
@@ -98,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
         return ApiError(res, 401, "Invalid user credentials")
     }
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken  -otp  -otpExpiry")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken  -otp  -otpExpiry  -updatedAt")
 
     if (!loggedInUser.isOtpVerified) {
         // Generate OTP
@@ -228,7 +229,53 @@ const resetPassword = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Password has been reset successfully"));
 });
 
+const uploadResumeController = asyncHandler(async (req, res) => {
+    if (!req.file || !req.file.path) {
+        return ApiError(res, 400, "PDF resume upload failed");
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) return ApiError(res, 404, "User not found");
+
+    user.resume = req.file.path; // Cloudinary URL
+    await user.save();
+
+    return res.status(200).json(
+        new ApiResponse(200, { resumeUrl: user.resume }, "Resume uploaded successfully")
+    );
+});
+
+const downloadResumeController = asyncHandler(async (req, res) => {
+    const { url, filename, preview } = req.query;
+
+    if (!url || !filename) {
+        res.status(400).send("Missing 'url' or 'filename'");
+        return;
+    }
+
+    const safeFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+
+    // 👇 Only set attachment if NOT previewing
+    if (preview !== 'true') {
+        res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"`);
+    }
+
+    res.setHeader('Content-Type', 'application/pdf');
+
+    https.get(url, (cloudinaryRes) => {
+        if (cloudinaryRes.statusCode !== 200) {
+            res.status(400).send('Failed to fetch file from Cloudinary.');
+            return;
+        }
+
+        cloudinaryRes.pipe(res);
+    }).on('error', (err) => {
+        console.error('Cloudinary download error:', err);
+        res.status(500).send('Error downloading file.');
+    });
+});
+
 export {
     registerUser, loginUser, logoutUser, refreshAccessToken,
-    verifyOtp, forgotPassword, resetPassword
+    verifyOtp, forgotPassword, resetPassword, uploadResumeController, downloadResumeController
 }

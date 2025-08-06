@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { createJob } from '../../api/jobs';
+import { updateJobs } from '../../api/jobs';
 import Button from '../utiles/Button';
+import { RxCross2 } from 'react-icons/rx';
 
 const InputField = ({ name, placeholder, onChange, onBlur, value, touched, errors }) => (
     <div className="relative">
@@ -73,32 +74,33 @@ const DynamicListInput = ({ label, items, setItems, placeholder }) => {
         </div>
     );
 };
-
-const JobPost = () => {
+const UpdateJobComponent = ({ job, setJob, fetchJobs }) => {
     const [loading, setLoading] = useState(false);
-    const [requirements, setRequirements] = useState([]);
-    const [responsibilities, setResponsibilities] = useState([]);
-    const [skills, setSkills] = useState([]);
+    const [requirements, setRequirements] = useState(job.requirements || []);
+    const [responsibilities, setResponsibilities] = useState(job.responsibilities || []);
+    const [skills, setSkills] = useState(job.skills || []);
 
     const formik = useFormik({
         initialValues: {
-            title: '',
-            department: '',
-            location: '',
-            type: 'Full-time',
-            experience: '',
-            description: '',
-            salary: '',
+            title: job.title,
+            department: job.department,
+            location: job.location,
+            type: job.type,
+            status: job.status,
+            experience: job.experience,
+            description: job.description,
+            salary: job.salary,
         },
         validationSchema: Yup.object({
             title: Yup.string().required('Title is required'),
             department: Yup.string().required('Department is required'),
             location: Yup.string().required('Location is required'),
             type: Yup.string().oneOf(['Full-time', 'Part-time']).required('Job type is required'),
+            status: Yup.string().oneOf(['open', 'closed']).required('Job status is required'),
             description: Yup.string().required('Description is required'),
             salary: Yup.string().required('Salary is required'),
         }),
-        onSubmit: async (values, { resetForm }) => {
+        onSubmit: async (values) => {
             setLoading(true);
             try {
                 const formData = {
@@ -106,14 +108,12 @@ const JobPost = () => {
                     requirements,
                     responsibilities,
                     skills,
+                    jobId: job._id
                 };
 
-                await createJob(formData);
+                await updateJobs(formData);
+                fetchJobs();
                 toast.success('Job posted successfully!');
-                resetForm();
-                setRequirements([]);
-                setResponsibilities([]);
-                setSkills([]);
             } catch (err) {
                 toast.error(err.message || 'Something went wrong');
             } finally {
@@ -124,7 +124,15 @@ const JobPost = () => {
 
     return (
         <div className='flex h-[calc(100vh-100px)] p-[10px] flex-col gap-[10px]'>
-            <h1 className="text-[25px] font-bold">Post a Job</h1>
+            <div className='flex justify-between items-center'>
+                <h1 className="text-[25px] font-bold">Update Job</h1>
+                <button
+                    onClick={() => setJob(null)}
+                    className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer"
+                >
+                    <div className="text-xl"><RxCross2 /> </div>
+                </button>
+            </div>
             <form onSubmit={formik.handleSubmit} className="flex flex-col gap-[20px]">
 
                 <InputField name="title" placeholder="Job Title" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.title} touched={formik.touched.title} errors={formik.errors.title} />
@@ -147,6 +155,19 @@ const JobPost = () => {
                 </div>
 
                 <div className='relative'>
+                    <select className="p-2 border rounded w-full outline-none"
+                        name="status" onChange={formik.handleChange}
+                        onBlur={formik.handleBlur} value={formik.values.status}
+                    >
+                        <option value="open">Open</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    {formik.touched.status && formik.errors.status && (
+                        <div className="text-red-500 text-sm mt-1 text-[12px] absolute bottom-[-15px]">{formik.errors.status}</div>
+                    )}
+                </div>
+
+                <div className='relative'>
                     <textarea className="p-2 border rounded w-full outline-none"
                         name="description" placeholder="Job Description"
                         rows="4" onChange={formik.handleChange}
@@ -161,12 +182,13 @@ const JobPost = () => {
                 <DynamicListInput label="Responsibilities" items={responsibilities} setItems={setResponsibilities} placeholder="Enter responsibility and click Add" />
                 <DynamicListInput label="Skills" items={skills} setItems={setSkills} placeholder="Enter skill and click Add" />
 
-                <div className='pb-2'>
-                    <Button onClick={formik.handleSubmit} isLoading={loading} text={'Post Job'} color={'white'} bg={'black'} />
+                <div className="flex gap-4 justify-center pb-3">
+                    <Button onClick={formik.handleSubmit} isLoading={loading} bg={'#00F295'} text={'Update job'} />
+                    <Button onClick={() => setJob(null)} border={'1.5px'} text={'Close'} />
                 </div>
             </form>
         </div>
     );
-};
+}
 
-export default JobPost;
+export default UpdateJobComponent

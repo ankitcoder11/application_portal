@@ -9,6 +9,7 @@ import { applyJob, getSavedJob, unSaveJob } from '../../api/application';
 import toast from 'react-hot-toast';
 import { GoBookmarkSlash } from 'react-icons/go';
 import { Link } from 'react-router-dom';
+import { RxCross2 } from 'react-icons/rx';
 
 const SavedJobs = () => {
     const [selectedJob, setSelectedJob] = useState(null);
@@ -146,7 +147,7 @@ const SavedJobs = () => {
                                     onClick={() => setSelectedJob(null)}
                                     className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer"
                                 >
-                                    <i className="ri-close-line text-xl"></i>
+                                    <div className="text-xl"><RxCross2 /> </div>
                                 </button>
                             </div>
 

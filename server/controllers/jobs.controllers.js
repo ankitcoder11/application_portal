@@ -116,24 +116,26 @@ export const createJob = asyncHandler(async (req, res) => {
 });
 
 export const updateJob = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const { title, company, location, type, description } = req.body;
+    const { jobId, title, company, location, type, salary, skills, status,
+        description, department, experience, requirements, responsibilities } = req.body;
 
-    const job = await Job.findById(id);
+    const job = await Job.findById(jobId);
     if (!job) {
         return ApiError(res, 404, "Job not found");
     }
 
-    // Update only provided fields
     job.title = title ?? job.title;
     job.company = company ?? job.company;
     job.location = location ?? job.location;
     job.type = type ?? job.type;
     job.description = description ?? job.description;
-
-    if (req.file?.path) {
-        job.image = req.file.path;
-    }
+    job.department = department ?? job.department;
+    job.experience = experience ?? job.experience;
+    job.requirements = requirements ?? job.requirements;
+    job.responsibilities = responsibilities ?? job.responsibilities;
+    job.salary = salary ?? job.salary;
+    job.skills = skills ?? job.skills;
+    job.status = status ?? job.skills;
 
     await job.save();
 

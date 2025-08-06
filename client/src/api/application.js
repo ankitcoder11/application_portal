@@ -2,6 +2,8 @@ import { del, get, post } from "./apiMethods";
 
 export const getAppliedJob = () => get(`/application`);
 export const applyJob = (data) => post(`/application/apply`, data);
+export const getAllAppliedJobs = () => get(`/application/get-all-applications`);
+export const updateStatus = (data) => post(`/application/update-status`,data);
 
 
 export const getSavedJob = () => get(`/savejob`);

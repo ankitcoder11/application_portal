@@ -61,7 +61,7 @@ const MyJobs = () => {
                                         </div>
                                         <div className="text-right">
                                             <div className="text-lg font-semibold text-green-600 mb-2">{job.jobId.salary}</div>
-                                            <div className="text-xs text-gray-500"> {new Date(job.jobId.posted).toLocaleString()}</div>
+                                            <div className="text-xs text-gray-500">{new Date(job.jobId.posted).toLocaleString()}</div>
                                         </div>
                                     </div>
 

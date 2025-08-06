@@ -14,3 +14,6 @@ export const forgotPassword = (data) => post('/users/forgot-password', data);
 
 // reset-password
 export const resetPassword = (data) => post('/users/reset-password', data);
+
+// upload resume
+export const userResume = (data) => post('/users/upload-resume', data);
