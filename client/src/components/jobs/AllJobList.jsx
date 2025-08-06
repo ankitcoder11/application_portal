@@ -159,7 +159,7 @@ const AllJobList = () => {
                         ))}
                 </div>
             }
-            <div>
+            {jobs.length !== 0 && <div>
                 <label htmlFor="custom-limit-select" className='mr-2'>
                     Jobs per page:
                 </label>
@@ -175,8 +175,8 @@ const AllJobList = () => {
                         </option>
                     ))}
                 </select>
-            </div>
-            <Pagination
+            </div>}
+            {jobs.length !== 0 && <Pagination
                 count={totalPages}
                 page={page}
                 onChange={handlePageChange}
@@ -185,7 +185,7 @@ const AllJobList = () => {
                 showFirstButton
                 showLastButton
                 className='pb-[10px] '
-            />
+            />}
             {selectedJob && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">

@@ -43,7 +43,7 @@ const MobileHeader = ({ setMobile }) => {
                             <Link to={'/admin/view-application'} className={`text-sm font-medium transition-colors hover:text-blue-600
                             ${pathname === '/admin/view-application' ? 'text-blue-600' : 'text-gray-700'}`} >View Applications</Link>
                         </>
-                        : <>
+                        : isAuthenticated && <>
                             <Link to={'/jobs/my-jobs'} className={`text-sm font-medium transition-colors hover:text-blue-600
                             ${pathname === '/jobs/my-jobs' ? 'text-blue-600' : 'text-gray-700'}`} >My jobs</Link>
                             <Link to={'/jobs/saved-jobs'} className={`text-sm font-medium transition-colors hover:text-blue-600
@@ -62,13 +62,13 @@ const MobileHeader = ({ setMobile }) => {
                         </>
                     }
                 </div>
-                <div className="bg-[#00F295] w-full rounded-md justify-center items-center flex flex-col gap-1 ">
+                {isAuthenticated && <div className="bg-[#00F295] w-full rounded-md justify-center items-center flex flex-col gap-1 ">
                     <div className="text-xl font-semibold">{user?.fullName}</div>
                     <div className="text-[#333333] ">{user?.email}</div>
                     {user?.resume && <div><Button bg={'black'} color={'white'} onClick={() => handlePreviewResume(user?.resume)} text={'Preview resume'} /></div>}
                     <div><Button bg={'black'} onClick={() => setResumePopUp(true)} color={'white'} text={user?.resume ? 'Upload new resume' : 'Upload resume'} /></div>
                     {resumePopUp && <PopUp close={() => setResumePopUp(false)}><ResumeUploader setResumePopUp={() => setResumePopUp(false)} /></PopUp>}
-                </div>
+                </div>}
             </div>
         </div>
     )
